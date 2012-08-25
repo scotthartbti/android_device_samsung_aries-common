@@ -37,6 +37,12 @@ else
     DATA_PART='/dev/block/mmcblk0p2'
 fi
 
+# check for old/non-cwm recovery.
+if ! /tmp/busybox test -n "$UPDATE_PACKAGE" ; then
+    # scrape package location from /tmp/recovery.log
+    UPDATE_PACKAGE=`/tmp/busybox cat /tmp/recovery.log | /tmp/busybox grep 'Update location:' | /tmp/busybox tail -n 1 | /tmp/busybox cut -d ' ' -f 3-`
+fi
+
 # check if we're running on a bml, mtd (old) or mtd (current) device
 if /tmp/busybox test -e /dev/block/bml7 ; then
     # we're running on a bml device
